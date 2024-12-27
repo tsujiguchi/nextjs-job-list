@@ -1,11 +1,6 @@
-import Link from "next/link";
-import JobListingContainer from "./components/JobListingContainer";
+import Link from 'next/link'
 
 async function getJobs() {
-  const res = await fetch(`${process.env.API_URL}/jobs`, {
-    next: { revalidate: 60 }
-  });
-
   return [
       {
         id: 1,
@@ -28,10 +23,22 @@ async function getJobs() {
     ]
 }
 
-export default async function JobsPage() {
+export default async function JobOffersPage() {
+  const jobs = await getJobs()
+
   return (
-    <div className="container mx-auto mt-2">
-      <Link href="/job_offers" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">求人一覧</Link>
+    <div className="w-full max-w-6xl mx-auto p-4">
+      <div className="grid gap-4">
+        {jobs.map((job) => (
+          <Link
+            key={job.id}
+            href={`/job_offers/${job.id}`}
+            className="block bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow"
+          >
+            <h3 className="text-lg font-bold mb-2">{job.title}</h3>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
